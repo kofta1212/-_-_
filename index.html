@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clothing Store</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; color: #333; }
+    header { background: #222; color: #fff; padding: 1rem; text-align: center; }
+    .container { padding: 2rem; max-width: 1000px; margin: auto; }
+    .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; }
+    .product { background: #fff; padding: 1rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center; }
+    .product img { max-width: 100%; border-radius: 6px; }
+    .product h3 { margin: 1rem 0 0.5rem; }
+    .product p { margin-bottom: 1rem; font-weight: bold; }
+    .btn { background: #222; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; border-radius: 5px; }
+    .btn:hover { background: #444; }
+    #cart { position: fixed; top: 1rem; right: 1rem; background: white; border: 1px solid #ccc; padding: 1rem; border-radius: 8px; max-width: 300px; }
+    #cart h4 { margin-bottom: 0.5rem; }
+    #cart ul { list-style: none; padding-left: 0; max-height: 200px; overflow-y: auto; }
+    #cart li { margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>حشيشه ستور</h1>
+    <p>المعلم زكريا و شركاؤه</p>
+  </header>
+
+  <div class="container">
+    <div class="products" id="product-list">
+      <!-- Products will be injected here -->
+    </div>
+  </div>
+
+  <div id="cart">
+    <h4>Your Cart</h4>
+    <ul id="cart-items"></ul>
+    <p><strong>Total:</strong> $<span id="cart-total">0.00</span></p>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'حته ب200', price: 200, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvQDwpm6_0GIgVYswKO-MfyBvmgAGaArPnZg&s' },
+      { id: 2, name: 'حته ب500', price: 500, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn0Uv4Z4ITyCnk1nS6SH4CT5tFiHhn3QwyPQ&s' },
+      { id: 3, name: 'حته ب1000', price: 1000, image: 'https://media.gemini.media/img/Medium/2023/12/26/2023_12_26_11_38_25_907.jpg' },
+      { id: 4, name: 'اثار الحاجه نفرتيتى', price: 1000000, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnnPng-Ee3oGbYYJYKnUkUcOeUkK-Olj2G5g&s' },
+    ];
+
+    const cart = [];
+
+    function renderProducts() {
+      const container = document.getElementById('product-list');
+      container.innerHTML = products.map(p => `
+        <div class="product">
+          <img src="${p.image}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>$${p.price.toFixed(2)}</p>
+          <button class="btn" onclick="addToCart(${p.id})">Add to Cart</button>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      cart.push(product);
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartList = document.getElementById('cart-items');
+      const totalDisplay = document.getElementById('cart-total');
+      cartList.innerHTML = cart.map(item => `<li>${item.name} - $${item.price.toFixed(2)}</li>`).join('');
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      totalDisplay.textContent = total.toFixed(2);
+    }
+
+    renderProducts();
+  </script>
+
+</body>
+</html>
